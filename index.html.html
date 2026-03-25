@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🏓 Pickle Princess — Tournament Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blush: #f9d0e0;
+    --rose: #f4a7c0;
+    --hot: #e8679a;
+    --deep: #c44b7c;
+    --petal: #fce8f0;
+    --cream: #fff5f9;
+    --white: #ffffff;
+    --text: #5a2d45;
+    --muted: #a87090;
+    --border: #f0bcd5;
+    --gold: #e8b86d;
+    --mint: #b8e8d8;
+    --sky: #c2d8f5;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+    background-image: 
+      radial-gradient(circle at 10% 20%, rgba(248,175,205,0.3) 0%, transparent 50%),
+      radial-gradient(circle at 90% 80%, rgba(244,167,192,0.2) 0%, transparent 50%),
+      url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f4a7c0' fill-opacity='0.06'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(135deg, #f4a7c0 0%, #e8679a 50%, #c44b7c 100%);
+    padding: 24px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 30px rgba(196,75,124,0.25);
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='50' cy='50' r='40' stroke='white' stroke-width='0.5' fill='none' opacity='0.15'/%3E%3Ccircle cx='50' cy='50' r='25' stroke='white' stroke-width='0.5' fill='none' opacity='0.1'/%3E%3C/svg%3E") repeat;
+    opacity: 0.4;
+  }
+  .header-left { position: relative; }
+  .header-left h1 {
+    font-family: 'Dancing Script', cursive;
+    font-size: 2.4rem;
+    color: white;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    letter-spacing: 0.5px;
+  }
+  .header-left p {
+    color: rgba(255,255,255,0.85);
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+  }
+  .header-right {
+    display: flex;
+    gap: 12px;
+    position: relative;
+  }
+  .nav-btn {
+    background: rgba(255,255,255,0.2);
+    border: 1.5px solid rgba(255,255,255,0.4);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    backdrop-filter: blur(4px);
+  }
+  .nav-btn:hover, .nav-btn.active {
+    background: white;
+    color: var(--deep);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  }
+
+  /* ── MAIN LAYOUT ── */
+  .container { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+
+  /* ── VIEWS ── */
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* ── YEAR OVERVIEW STRIP ── */
+  .year-strip {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding: 16px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(196,75,124,0.08);
+    margin-bottom: 28px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--rose) transparent;
+  }
+  .month-chip {
+    flex-shrink: 0;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1.5px solid var(--border);
+    color: var(--muted);
+    background: var(--cream);
+    position: relative;
+  }
+  .month-chip.has-events::after {
+    content: '●';
+    font-size: 0.4rem;
+    color: var(--hot);
+    position: absolute;
+    top: 4px; right: 6px;
+  }
+  .month-chip.active, .month-chip:hover {
+    background: linear-gradient(135deg, var(--rose), var(--hot));
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(232,103,154,0.3);
+  }
+
+  /* ── CALENDAR ── */
+  .calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .cal-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--deep);
+  }
+  .cal-nav {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .cal-nav-btn {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border);
+    background: white;
+    cursor: pointer;
+    font-size: 1rem;
+    color: var(--hot);
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .cal-nav-btn:hover {
+    background: var(--hot);
+    color: white;
+    border-color: var(--hot);
+  }
+
+  .calendar-grid {
+    background: white;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 4px 30px rgba(196,75,124,0.1);
+  }
+  .cal-days-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    background: linear-gradient(135deg, var(--blush), var(--petal));
+  }
+  .cal-day-name {
+    text-align: center;
+    padding: 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    color: var(--hot);
+    text-transform: uppercase;
+  }
+  .cal-cells {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+  }
+  .cal-cell {
+    min-height: 100px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 8px;
+    cursor: pointer;
+    transition: background 0.15s;
+    position: relative;
+  }
+  .cal-cell:nth-child(7n) { border-right: none; }
+  .cal-cell:hover { background: var(--petal); }
+  .cal-cell.empty { background: var(--cream); cursor: default; }
+  .cal-cell.today .day-num {
+    background: linear-gradient(135deg, var(--rose), var(--hot));
+    color: white;
+    border-radius: 50%;
+    width: 26px; height: 26px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+  }
+  .day-num {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--muted);
+    margin-bottom: 4px;
+    width: 26px; height: 26px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .day-event {
+    font-size: 0.65rem;
+    padding: 2px 6px;
+    border-radius: 6px;
+    margin-bottom: 2px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+  }
+  .day-event.singles { background: #ffd6e8; color: #c44b7c; }
+  .day-event.womens-doubles { background: #d6eeff; color: #2d6fa8; }
+  .day-event.mixed-doubles { background: #d6ffe8; color: #1a7a4a; }
+  .day-more { font-size: 0.6rem; color: var(--muted); padding: 0 4px; }
+
+  /* ── ADD TOURNAMENT BUTTON ── */
+  .fab {
+    position: fixed;
+    bottom: 32px; right: 32px;
+    width: 60px; height: 60px;
+    background: linear-gradient(135deg, var(--rose), var(--hot));
+    border: none;
+    border-radius: 50%;
+    color: white;
+    font-size: 1.6rem;
+    cursor: pointer;
+    box-shadow: 0 6px 24px rgba(232,103,154,0.45);
+    transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 100;
+  }
+  .fab:hover {
+    transform: scale(1.1) rotate(15deg);
+    box-shadow: 0 8px 32px rgba(232,103,154,0.6);
+  }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(90,45,69,0.35);
+    backdrop-filter: blur(6px);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: white;
+    border-radius: 28px;
+    padding: 36px;
+    width: 100%;
+    max-width: 560px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(196,75,124,0.25);
+    animation: slideUp 0.3s ease;
+    position: relative;
+  }
+  @keyframes slideUp {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+  }
+  .modal-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--deep);
+  }
+  .modal-close {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: var(--petal);
+    color: var(--hot);
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .modal-close:hover { background: var(--hot); color: white; }
+
+  /* ── FORM ── */
+  .form-group { margin-bottom: 20px; }
+  .form-label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .form-input, .form-select, .form-textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    color: var(--text);
+    background: var(--cream);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+  }
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    border-color: var(--rose);
+    box-shadow: 0 0 0 3px rgba(244,167,192,0.2);
+    background: white;
+  }
+  .form-textarea { resize: vertical; min-height: 80px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  /* ── EVENT TYPES CHECKBOXES ── */
+  .event-types { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
+  .type-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--muted);
+    background: var(--cream);
+    transition: all 0.2s;
+    user-select: none;
+  }
+  .type-chip input { display: none; }
+  .type-chip.selected-singles { background: #ffd6e8; color: #c44b7c; border-color: #f4a7c0; }
+  .type-chip.selected-womens { background: #d6eeff; color: #2d6fa8; border-color: #a0c8f0; }
+  .type-chip.selected-mixed { background: #d6ffe8; color: #1a7a4a; border-color: #7fd4a8; }
+
+  /* ── PARTNER FIELDS ── */
+  .partner-section {
+    background: var(--petal);
+    border-radius: 16px;
+    padding: 16px;
+    margin-top: 8px;
+  }
+  .partner-section h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    color: var(--deep);
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .partner-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: end; margin-bottom: 10px; }
+  .no-partner-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #fff3cd;
+    color: #b07d00;
+    border: 1.5px solid #ffe08a;
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+
+  /* ── SUBMIT BTN ── */
+  .btn-primary {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, var(--rose), var(--hot));
+    border: none;
+    border-radius: 16px;
+    color: white;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 16px rgba(232,103,154,0.35);
+    margin-top: 8px;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(232,103,154,0.45);
+  }
+  .btn-secondary {
+    padding: 10px 20px;
+    background: white;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--rose); color: var(--hot); }
+
+  /* ── TOURNAMENT LIST VIEW ── */
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--deep);
+    margin-bottom: 8px;
+  }
+  .section-subtitle {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-bottom: 24px;
+  }
+  .filter-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .filter-btn {
+    padding: 8px 18px;
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    background: white;
+    color: var(--muted);
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .filter-btn.active, .filter-btn:hover {
+    background: linear-gradient(135deg, var(--rose), var(--hot));
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(232,103,154,0.25);
+  }
+
+  .tournament-card {
+    background: white;
+    border-radius: 20px;
+    padding: 22px 26px;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 16px rgba(196,75,124,0.08);
+    border: 1.5px solid var(--border);
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .tournament-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: linear-gradient(to bottom, var(--rose), var(--hot));
+    border-radius: 4px 0 0 4px;
+  }
+  .tournament-card:hover {
+    transform: translateX(4px);
+    box-shadow: 0 4px 24px rgba(196,75,124,0.15);
+  }
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .card-actions { display: flex; gap: 8px; }
+  .card-action-btn {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border);
+    background: var(--cream);
+    color: var(--muted);
+    font-size: 0.8rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .card-action-btn:hover { border-color: var(--hot); color: var(--hot); }
+  .card-action-btn.del:hover { border-color: #e05252; color: #e05252; }
+
+  .card-meta {
+    display: flex;
+    gap: 14px;
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .card-meta span { display: flex; align-items: center; gap: 4px; }
+
+  .card-events { display: flex; flex-direction: column; gap: 6px; }
+  .card-event {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 0.82rem;
+  }
+  .card-event.singles { background: #fff0f6; }
+  .card-event.womens-doubles { background: #f0f6ff; }
+  .card-event.mixed-doubles { background: #f0fff6; }
+  .event-label {
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .event-label.singles { color: #c44b7c; }
+  .event-label.womens-doubles { color: #2d6fa8; }
+  .event-label.mixed-doubles { color: #1a7a4a; }
+  .partner-info { color: var(--text); flex: 1; }
+
+  /* ── STATS VIEW ── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .stat-card {
+    background: white;
+    border-radius: 20px;
+    padding: 22px;
+    text-align: center;
+    box-shadow: 0 2px 16px rgba(196,75,124,0.08);
+    border: 1.5px solid var(--border);
+  }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--rose), var(--hot));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .stat-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 4px;
+  }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted);
+  }
+  .empty-state .emoji { font-size: 3.5rem; margin-bottom: 16px; }
+  .empty-state h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: var(--deep);
+    margin-bottom: 8px;
+  }
+  .empty-state p { font-size: 0.9rem; }
+
+  /* ── DAY DETAIL MODAL ── */
+  .day-events-list { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+  .day-event-item {
+    padding: 12px 16px;
+    border-radius: 14px;
+    border: 1.5px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .day-event-item:hover { border-color: var(--rose); background: var(--petal); }
+  .day-event-item strong { font-family: 'Playfair Display', serif; color: var(--text); }
+  .day-event-item small { color: var(--muted); font-size: 0.78rem; }
+
+  /* ── NEED PARTNER ALERT ── */
+  .need-partner-alert {
+    background: linear-gradient(135deg, #fff8e8, #fff3cd);
+    border: 1.5px solid #ffe08a;
+    border-radius: 14px;
+    padding: 12px 16px;
+    font-size: 0.82rem;
+    color: #8a6500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+  }
+
+  /* ── PLAYING TOGGLE ── */
+  .playing-toggle-wrap {
+    display: flex;
+    gap: 0;
+    background: var(--petal);
+    border-radius: 16px;
+    padding: 4px;
+    margin-bottom: 4px;
+  }
+  .playing-toggle-btn {
+    flex: 1;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s;
+    background: transparent;
+    color: var(--muted);
+  }
+  .playing-toggle-btn.active-playing {
+    background: linear-gradient(135deg, #d6ffe8, #a8eec8);
+    color: #1a7a4a;
+    box-shadow: 0 3px 12px rgba(26,122,74,0.15);
+  }
+  .playing-toggle-btn.active-not-playing {
+    background: linear-gradient(135deg, #ffe8e8, #ffc2c2);
+    color: #b03030;
+    box-shadow: 0 3px 12px rgba(176,48,48,0.15);
+  }
+
+  /* ── REG STATUS TOGGLE ── */
+  .reg-toggle-wrap {
+    display: flex;
+    gap: 0;
+    background: var(--petal);
+    border-radius: 14px;
+    padding: 4px;
+  }
+  .reg-toggle-btn {
+    flex: 1;
+    padding: 10px 12px;
+    border: none;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: transparent;
+    color: var(--muted);
+  }
+  .reg-toggle-btn.active-need {
+    background: linear-gradient(135deg, #fff3cd, #ffe08a);
+    color: #8a6500;
+    box-shadow: 0 3px 10px rgba(138,101,0,0.12);
+  }
+  .reg-toggle-btn.active-registered {
+    background: linear-gradient(135deg, #d6eeff, #a0c8f0);
+    color: #2d6fa8;
+    box-shadow: 0 3px 10px rgba(45,111,168,0.15);
+  }
+
+  /* not-playing calendar badge */
+  .day-event.not-playing { background: #f0f0f0; color: #888; font-style: italic; }
+
+  /* not-playing card style */
+  .tournament-card.not-playing-card { opacity: 0.72; border-style: dashed; }
+  .tournament-card.not-playing-card::before { background: #ccc; }
+
+
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--rose); border-radius: 10px; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    header { padding: 16px 20px; }
+    .header-left h1 { font-size: 1.8rem; }
+    .container { padding: 20px 14px; }
+    .form-row { grid-template-columns: 1fr; }
+    .cal-cell { min-height: 60px; padding: 4px; }
+    .day-num { font-size: 0.75rem; width: 22px; height: 22px; }
+    .day-event { font-size: 0.55rem; }
+  }
+
+  .ribbon {
+    position: absolute;
+    top: 16px;
+    right: -8px;
+    background: var(--gold);
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    padding: 3px 10px;
+    border-radius: 4px 4px 4px 0;
+    text-transform: uppercase;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  .ribbon::after {
+    content: '';
+    position: absolute;
+    bottom: -6px; right: 0;
+    border-left: 8px solid #c49a3c;
+    border-bottom: 6px solid transparent;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <h1>🏓 Pickle Princess</h1>
+    <p>Tournament Tracker ✨</p>
+  </div>
+  <div class="header-right">
+    <button class="nav-btn active" onclick="showView('calendar')">📅 Calendar</button>
+    <button class="nav-btn" onclick="showView('tournaments')">🏆 Tournaments</button>
+    <button class="nav-btn" onclick="showView('stats')">📊 Stats</button>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- CALENDAR VIEW -->
+  <div id="view-calendar" class="view active">
+    <div class="year-strip" id="monthStrip"></div>
+    <div class="calendar-header">
+      <div>
+        <h2 class="cal-title" id="calMonthTitle"></h2>
+      </div>
+      <div class="cal-nav">
+        <button class="cal-nav-btn" onclick="changeMonth(-1)">‹</button>
+        <button class="cal-nav-btn" onclick="changeMonth(1)">›</button>
+        <button class="btn-secondary" onclick="goToToday()">Today</button>
+      </div>
+    </div>
+    <div class="calendar-grid">
+      <div class="cal-days-header">
+        <div class="cal-day-name">Sun</div>
+        <div class="cal-day-name">Mon</div>
+        <div class="cal-day-name">Tue</div>
+        <div class="cal-day-name">Wed</div>
+        <div class="cal-day-name">Thu</div>
+        <div class="cal-day-name">Fri</div>
+        <div class="cal-day-name">Sat</div>
+      </div>
+      <div class="cal-cells" id="calCells"></div>
+    </div>
+  </div>
+
+  <!-- TOURNAMENTS VIEW -->
+  <div id="view-tournaments" class="view">
+    <h2 class="section-title">My Tournaments</h2>
+    <p class="section-subtitle">All planned tournaments for this season 🌸</p>
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="filterTournaments('all', this)">All</button>
+      <button class="filter-btn" onclick="filterTournaments('playing', this)">✅ Playing</button>
+      <button class="filter-btn" onclick="filterTournaments('not-playing', this)">🚫 Not Playing</button>
+      <button class="filter-btn" onclick="filterTournaments('singles', this)">Singles</button>
+      <button class="filter-btn" onclick="filterTournaments('womens-doubles', this)">Women's Doubles</button>
+      <button class="filter-btn" onclick="filterTournaments('mixed-doubles', this)">Mixed Doubles</button>
+      <button class="filter-btn" onclick="filterTournaments('needs-partner', this)">⚠️ Needs Partner</button>
+    </div>
+    <div id="tournamentList"></div>
+  </div>
+
+  <!-- STATS VIEW -->
+  <div id="view-stats" class="view">
+    <h2 class="section-title">My Season at a Glance</h2>
+    <p class="section-subtitle">Track your journey to going pro 🎯</p>
+    <div class="stats-grid" id="statsGrid"></div>
+    <h3 style="font-family:'Playfair Display',serif;color:var(--deep);margin-bottom:16px;">📍 Upcoming Tournaments</h3>
+    <div id="upcomingList"></div>
+  </div>
+
+</div>
+
+<!-- FAB -->
+<button class="fab" onclick="openAddModal()" title="Add Tournament">+</button>
+
+<!-- ADD/EDIT TOURNAMENT MODAL -->
+<div class="modal-overlay" id="tournamentModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title" id="modalTitle">Add Tournament 🏓</h3>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+
+    <!-- STEP 1: Tournament name + dates always shown -->
+    <div class="form-group">
+      <label class="form-label">Tournament Name *</label>
+      <input type="text" class="form-input" id="tName" placeholder="e.g. National Open Pickleball Championship">
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Start Date *</label>
+        <input type="date" class="form-input" id="tStartDate">
+      </div>
+      <div class="form-group">
+        <label class="form-label">End Date *</label>
+        <input type="date" class="form-input" id="tEndDate">
+      </div>
+    </div>
+
+    <!-- STEP 2: Playing toggle — always shown -->
+    <div class="form-group">
+      <label class="form-label">Are you playing? *</label>
+      <div class="playing-toggle-wrap">
+        <button type="button" class="playing-toggle-btn active-playing" id="btn-playing" onclick="setPlaying(true)">✅ Playing</button>
+        <button type="button" class="playing-toggle-btn" id="btn-not-playing" onclick="setPlaying(false)">🚫 Not Playing</button>
+      </div>
+    </div>
+
+    <!-- DETAILS SECTION: only shown if Playing -->
+    <div id="detailsSection">
+
+      <!-- Registration Status toggle -->
+      <div class="form-group">
+        <label class="form-label">Registration Status *</label>
+        <div class="reg-toggle-wrap">
+          <button type="button" class="reg-toggle-btn active-need" id="btn-need-reg" onclick="setRegStatus('need-to-register')">⏳ Need to Register</button>
+          <button type="button" class="reg-toggle-btn" id="btn-registered" onclick="setRegStatus('registered')">✅ Registered</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Location</label>
+        <input type="text" class="form-input" id="tLocation" placeholder="City, State or Venue name">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Division / Level</label>
+        <select class="form-select" id="tLevel">
+          <option value="">Select level...</option>
+          <option>Pro Qualifier</option>
+          <option>Open Division</option>
+          <option>5.0</option>
+          <option>4.5</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Event Types *</label>
+        <div class="event-types" id="eventTypesContainer">
+          <label class="type-chip" id="chip-singles">
+            <input type="checkbox" value="singles" onchange="toggleType(this)"> 🎯 Singles
+          </label>
+          <label class="type-chip" id="chip-womens">
+            <input type="checkbox" value="womens-doubles" onchange="toggleType(this)"> 👯 Women's Doubles
+          </label>
+          <label class="type-chip" id="chip-mixed">
+            <input type="checkbox" value="mixed-doubles" onchange="toggleType(this)"> 💕 Mixed Doubles
+          </label>
+        </div>
+      </div>
+
+      <!-- Partner section: shown when doubles selected -->
+      <div id="partnerSection" style="display:none;">
+        <div class="partner-section">
+          <h4>🤝 Partner Info</h4>
+          <div id="partnerFields"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Notes</label>
+        <textarea class="form-textarea" id="tNotes" placeholder="Prize money, registration deadline, travel info..."></textarea>
+      </div>
+
+    </div><!-- end detailsSection -->
+
+    <button class="btn-primary" onclick="saveTournament()">Save Tournament 🌸</button>
+  </div>
+</div>
+
+<!-- DAY DETAIL MODAL -->
+<div class="modal-overlay" id="dayModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title" id="dayModalTitle">March 15</h3>
+      <button class="modal-close" onclick="closeDayModal()">✕</button>
+    </div>
+    <div id="dayModalContent"></div>
+    <button class="btn-primary" style="margin-top:20px" onclick="openAddModalForDate()">+ Add Tournament on this Day</button>
+  </div>
+</div>
+
+<script>
+// ── SUPABASE CONFIG ──
+const SUPABASE_URL = 'https://mlsdzqseujwljgwutkub.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1sc2R6cXNldWp3bGpnd3V0a3ViIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ0NzA2NzMsImV4cCI6MjA5MDA0NjY3M30.3I6jwb0ok4NhZx7pGT6qjaNw-tMAnM0pdJbtbtnVtS0';
+const API = `${SUPABASE_URL}/rest/v1/tournaments`;
+const HEADERS = {
+  'Content-Type': 'application/json',
+  'apikey': SUPABASE_KEY,
+  'Authorization': `Bearer ${SUPABASE_KEY}`,
+  'Prefer': 'return=representation'
+};
+
+// ── DATA ──
+let tournaments = [];
+let currentYear = new Date().getFullYear();
+let currentMonth = new Date().getMonth();
+let editingId = null;
+let selectedDayDate = null;
+let isPlaying = true;
+let regStatus = 'need-to-register';
+
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const today = new Date();
+
+// ── LOADING UI ──
+function showLoading(msg = 'Saving...') {
+  let el = document.getElementById('loadingToast');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'loadingToast';
+    el.style.cssText = `position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#f4a7c0,#e8679a);color:white;padding:10px 24px;border-radius:30px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:0.9rem;box-shadow:0 4px 20px rgba(232,103,154,0.4);z-index:999;transition:opacity 0.3s;`;
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  el.style.opacity = '1';
+}
+function hideLoading() {
+  const el = document.getElementById('loadingToast');
+  if (el) el.style.opacity = '0';
+}
+function showError(msg) {
+  showLoading('❌ ' + msg);
+  setTimeout(hideLoading, 3000);
+}
+function showSuccess(msg) {
+  showLoading('✅ ' + msg);
+  setTimeout(hideLoading, 2000);
+}
+
+// ── DB HELPERS ──
+// Convert DB row → app object
+function fromRow(row) {
+  return {
+    id: row.id,
+    name: row.name,
+    startDate: row.start_date,
+    endDate: row.end_date,
+    playing: row.playing,
+    regStatus: row.reg_status,
+    location: row.location,
+    level: row.level,
+    notes: row.notes,
+    events: row.events || [],
+    createdAt: row.created_at
+  };
+}
+// Convert app object → DB row
+function toRow(t) {
+  return {
+    id: t.id,
+    name: t.name,
+    start_date: t.startDate,
+    end_date: t.endDate,
+    playing: t.playing,
+    reg_status: t.regStatus || null,
+    location: t.location || null,
+    level: t.level || null,
+    notes: t.notes || null,
+    events: t.events || [],
+    created_at: t.createdAt || Date.now()
+  };
+}
+
+async function loadFromDB() {
+  showLoading('Loading your tournaments... 🌸');
+  try {
+    const res = await fetch(`${API}?order=start_date.asc`, { headers: HEADERS });
+    if (!res.ok) throw new Error(await res.text());
+    const rows = await res.json();
+    tournaments = rows.map(fromRow);
+    hideLoading();
+    renderCalendar();
+    renderMonthStrip();
+  } catch(e) {
+    showError('Could not load data. Check your connection.');
+    console.error(e);
+  }
+}
+
+async function saveToDB(t) {
+  showLoading('Saving... 🌸');
+  try {
+    const row = toRow(t);
+    const res = await fetch(API, {
+      method: 'POST',
+      headers: { ...HEADERS, 'Prefer': 'resolution=merge-duplicates,return=representation' },
+      body: JSON.stringify(row)
+    });
+    if (!res.ok) throw new Error(await res.text());
+    showSuccess('Saved!');
+  } catch(e) {
+    showError('Could not save. Try again.');
+    console.error(e);
+  }
+}
+
+async function deleteFromDB(id) {
+  showLoading('Deleting...');
+  try {
+    const res = await fetch(`${API}?id=eq.${id}`, { method: 'DELETE', headers: HEADERS });
+    if (!res.ok) throw new Error(await res.text());
+    showSuccess('Deleted!');
+  } catch(e) {
+    showError('Could not delete. Try again.');
+    console.error(e);
+  }
+}
+
+// ── PLAYING TOGGLE ──
+function setPlaying(playing) {
+  isPlaying = playing;
+  document.getElementById('btn-playing').className = 'playing-toggle-btn' + (playing ? ' active-playing' : '');
+  document.getElementById('btn-not-playing').className = 'playing-toggle-btn' + (!playing ? ' active-not-playing' : '');
+  document.getElementById('detailsSection').style.display = playing ? 'block' : 'none';
+}
+
+// ── REG STATUS TOGGLE ──
+function setRegStatus(status) {
+  regStatus = status;
+  document.getElementById('btn-need-reg').className = 'reg-toggle-btn' + (status === 'need-to-register' ? ' active-need' : '');
+  document.getElementById('btn-registered').className = 'reg-toggle-btn' + (status === 'registered' ? ' active-registered' : '');
+}
+
+// ── VIEWS ──
+function showView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  event.target.classList.add('active');
+  if (name === 'tournaments') renderTournamentList('all');
+  if (name === 'stats') renderStats();
+}
+
+// ── MONTH STRIP ──
+function renderMonthStrip() {
+  const strip = document.getElementById('monthStrip');
+  strip.innerHTML = '';
+  for (let m = 0; m < 12; m++) {
+    const hasEvents = tournaments.some(t => {
+      const s = new Date(t.startDate + 'T00:00:00');
+      const e = new Date(t.endDate + 'T00:00:00');
+      return (s.getFullYear() === currentYear && s.getMonth() === m) ||
+             (e.getFullYear() === currentYear && e.getMonth() === m);
+    });
+    const chip = document.createElement('div');
+    chip.className = 'month-chip' + (m === currentMonth ? ' active' : '') + (hasEvents ? ' has-events' : '');
+    chip.textContent = MONTHS[m].slice(0,3);
+    chip.onclick = () => { currentMonth = m; renderCalendar(); renderMonthStrip(); };
+    strip.appendChild(chip);
+  }
+}
+
+// ── CALENDAR ──
+function renderCalendar() {
+  document.getElementById('calMonthTitle').textContent = MONTHS[currentMonth] + ' ' + currentYear;
+  const cells = document.getElementById('calCells');
+  cells.innerHTML = '';
+  const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+  for (let i = 0; i < firstDay; i++) {
+    const el = document.createElement('div');
+    el.className = 'cal-cell empty';
+    cells.appendChild(el);
+  }
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isToday = today.getFullYear() === currentYear && today.getMonth() === currentMonth && today.getDate() === d;
+    const cell = document.createElement('div');
+    cell.className = 'cal-cell' + (isToday ? ' today' : '');
+    cell.onclick = () => openDayModal(dateStr, d);
+
+    const num = document.createElement('div');
+    num.className = 'day-num';
+    num.textContent = d;
+    cell.appendChild(num);
+
+    const dayTourneys = getTournamentsOnDate(dateStr);
+    let shown = 0;
+    dayTourneys.forEach(t => {
+      if (shown >= 2) return;
+      if (!t.playing) {
+        const badge = document.createElement('div');
+        badge.className = 'day-event not-playing';
+        badge.textContent = t.name;
+        badge.onclick = e => { e.stopPropagation(); openEditModal(t.id); };
+        cell.appendChild(badge);
+        shown++;
+      } else {
+        t.events.forEach(ev => {
+          if (shown >= 2) return;
+          const badge = document.createElement('div');
+          badge.className = 'day-event ' + ev.type;
+          badge.textContent = t.name;
+          badge.onclick = e => { e.stopPropagation(); openEditModal(t.id); };
+          cell.appendChild(badge);
+          shown++;
+        });
+      }
+    });
+    if (dayTourneys.reduce((a,t) => a + (t.playing ? t.events.length : 1), 0) > 2) {
+      const more = document.createElement('div');
+      more.className = 'day-more';
+      more.textContent = '+ more';
+      cell.appendChild(more);
+    }
+
+    cells.appendChild(cell);
+  }
+}
+
+function getTournamentsOnDate(dateStr) {
+  return tournaments.filter(t => {
+    return dateStr >= t.startDate && dateStr <= t.endDate;
+  });
+}
+
+function changeMonth(dir) {
+  currentMonth += dir;
+  if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+  if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+  renderCalendar();
+  renderMonthStrip();
+}
+
+function goToToday() {
+  currentYear = today.getFullYear();
+  currentMonth = today.getMonth();
+  renderCalendar();
+  renderMonthStrip();
+}
+
+// ── DAY MODAL ──
+function openDayModal(dateStr, d) {
+  selectedDayDate = dateStr;
+  const date = new Date(dateStr + 'T00:00:00');
+  document.getElementById('dayModalTitle').textContent = MONTHS[date.getMonth()] + ' ' + d + ', ' + date.getFullYear();
+  const content = document.getElementById('dayModalContent');
+  const dayTourneys = getTournamentsOnDate(dateStr);
+  if (dayTourneys.length === 0) {
+    content.innerHTML = `<div class="empty-state" style="padding:30px 0"><div class="emoji">🏖️</div><p>No tournaments on this day yet.</p></div>`;
+  } else {
+    content.innerHTML = '<div class="day-events-list">' + dayTourneys.map(t => `
+      <div class="day-event-item" onclick="closeDayModal(); openEditModal('${t.id}')">
+        <div>
+          <strong>${t.name}</strong><br>
+          <small>📍 ${t.location || 'Location TBD'} · ${formatDate(t.startDate)} – ${formatDate(t.endDate)}</small><br>
+          <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;">
+            ${!t.playing
+              ? `<span class="day-event not-playing" style="display:inline-block">🚫 Not Playing</span>`
+              : t.events.map(ev => `<span class="day-event ${ev.type}" style="display:inline-block">${typeLabel(ev.type)}</span>`).join('')}
+          </div>
+        </div>
+        <span style="color:var(--rose);font-size:1.2rem">›</span>
+      </div>
+    `).join('') + '</div>';
+  }
+  document.getElementById('dayModal').classList.add('open');
+}
+
+function closeDayModal() {
+  document.getElementById('dayModal').classList.remove('open');
+}
+
+function openAddModalForDate() {
+  closeDayModal();
+  openAddModal();
+  if (selectedDayDate) {
+    document.getElementById('tStartDate').value = selectedDayDate;
+    document.getElementById('tEndDate').value = selectedDayDate;
+  }
+}
+
+// ── MODAL ──
+function openAddModal() {
+  editingId = null;
+  document.getElementById('modalTitle').textContent = 'Add Tournament 🏓';
+  clearForm();
+  document.getElementById('tournamentModal').classList.add('open');
+}
+
+function openEditModal(id) {
+  editingId = id;
+  const t = tournaments.find(x => x.id === id);
+  if (!t) return;
+  document.getElementById('modalTitle').textContent = 'Edit Tournament ✏️';
+  document.getElementById('tName').value = t.name;
+  document.getElementById('tStartDate').value = t.startDate;
+  document.getElementById('tEndDate').value = t.endDate;
+
+  // Playing toggle
+  setPlaying(t.playing !== false);
+
+  if (t.playing !== false) {
+    document.getElementById('tLocation').value = t.location || '';
+    document.getElementById('tLevel').value = t.level || '';
+    document.getElementById('tNotes').value = t.notes || '';
+    setRegStatus(t.regStatus || 'need-to-register');
+
+    document.querySelectorAll('.type-chip input').forEach(cb => {
+      cb.checked = false;
+      cb.closest('.type-chip').className = 'type-chip';
+    });
+    (t.events || []).forEach(ev => {
+      const cb = document.querySelector(`.type-chip input[value="${ev.type}"]`);
+      if (cb) { cb.checked = true; updateChipStyle(cb); }
+    });
+    updatePartnerSection(t.events || []);
+  }
+
+  document.getElementById('tournamentModal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('tournamentModal').classList.remove('open');
+  editingId = null;
+}
+
+function clearForm() {
+  document.getElementById('tName').value = '';
+  document.getElementById('tStartDate').value = '';
+  document.getElementById('tEndDate').value = '';
+  document.getElementById('tLocation').value = '';
+  document.getElementById('tLevel').value = '';
+  document.getElementById('tNotes').value = '';
+  setPlaying(true);
+  setRegStatus('need-to-register');
+  document.querySelectorAll('.type-chip input').forEach(cb => {
+    cb.checked = false;
+    cb.closest('.type-chip').className = 'type-chip';
+  });
+  document.getElementById('partnerSection').style.display = 'none';
+  document.getElementById('partnerFields').innerHTML = '';
+}
+
+function toggleType(cb) {
+  updateChipStyle(cb);
+  const selected = Array.from(document.querySelectorAll('.type-chip input:checked')).map(c => ({
+    type: c.value,
+    partner: ''
+  }));
+  updatePartnerSection(selected);
+}
+
+function updateChipStyle(cb) {
+  const chip = cb.closest('.type-chip');
+  chip.className = 'type-chip';
+  if (cb.checked) {
+    if (cb.value === 'singles') chip.classList.add('selected-singles');
+    if (cb.value === 'womens-doubles') chip.classList.add('selected-womens');
+    if (cb.value === 'mixed-doubles') chip.classList.add('selected-mixed');
+  }
+}
+
+function updatePartnerSection(events) {
+  const doublesEvents = events.filter(ev => ev.type !== 'singles');
+  const section = document.getElementById('partnerSection');
+  const fields = document.getElementById('partnerFields');
+  if (doublesEvents.length === 0) {
+    section.style.display = 'none';
+    return;
+  }
+  section.style.display = 'block';
+  fields.innerHTML = doublesEvents.map(ev => `
+    <div style="margin-bottom:12px">
+      <label class="form-label" style="margin-bottom:6px">${typeLabel(ev.type)}</label>
+      <div class="partner-row">
+        <input type="text" class="form-input" id="partner-${ev.type}" 
+               placeholder="Partner's name (leave blank if TBD)"
+               value="${ev.partner || ''}"
+               oninput="checkPartnerWarning('${ev.type}')">
+      </div>
+      <div id="warn-${ev.type}" style="display:${!ev.partner ? 'flex' : 'none'}">
+        <div class="no-partner-badge">⚠️ Partner Needed!</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function checkPartnerWarning(type) {
+  const val = document.getElementById('partner-' + type)?.value || '';
+  const warn = document.getElementById('warn-' + type);
+  if (warn) warn.style.display = val.trim() ? 'none' : 'flex';
+}
+
+async function saveTournament() {
+  const name = document.getElementById('tName').value.trim();
+  const startDate = document.getElementById('tStartDate').value;
+  const endDate = document.getElementById('tEndDate').value;
+  if (!name || !startDate || !endDate) {
+    alert('Please fill in the name and dates! 🌸');
+    return;
+  }
+
+  let t = {
+    id: editingId || Date.now().toString(),
+    name,
+    startDate,
+    endDate,
+    playing: isPlaying,
+    createdAt: editingId ? (tournaments.find(x=>x.id===editingId)?.createdAt || Date.now()) : Date.now()
+  };
+
+  if (isPlaying) {
+    const checkedTypes = Array.from(document.querySelectorAll('.type-chip input:checked'));
+    if (checkedTypes.length === 0) {
+      alert('Please select at least one event type! 🎯');
+      return;
+    }
+    t.regStatus = regStatus;
+    t.location = document.getElementById('tLocation').value.trim();
+    t.level = document.getElementById('tLevel').value;
+    t.notes = document.getElementById('tNotes').value.trim();
+    t.events = checkedTypes.map(cb => ({
+      type: cb.value,
+      partner: cb.value !== 'singles' ? (document.getElementById('partner-' + cb.value)?.value.trim() || '') : null
+    }));
+  } else {
+    t.events = [];
+  }
+
+  // Upsert locally + to DB
+  const idx = tournaments.findIndex(x => x.id === t.id);
+  if (idx >= 0) tournaments[idx] = t; else tournaments.push(t);
+  closeModal();
+  renderCalendar();
+  renderMonthStrip();
+  await saveToDB(t);
+}
+
+// ── TOURNAMENT LIST ──
+let currentFilter = 'all';
+function filterTournaments(filter, btn) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTournamentList(filter);
+}
+
+function renderTournamentList(filter) {
+  const list = document.getElementById('tournamentList');
+  let filtered = [...tournaments].sort((a,b) => a.startDate.localeCompare(b.startDate));
+  if (filter === 'playing') filtered = filtered.filter(t => t.playing !== false);
+  else if (filter === 'not-playing') filtered = filtered.filter(t => t.playing === false);
+  else if (filter === 'singles') filtered = filtered.filter(t => t.playing && t.events.some(e => e.type === 'singles'));
+  else if (filter === 'womens-doubles') filtered = filtered.filter(t => t.playing && t.events.some(e => e.type === 'womens-doubles'));
+  else if (filter === 'mixed-doubles') filtered = filtered.filter(t => t.playing && t.events.some(e => e.type === 'mixed-doubles'));
+  else if (filter === 'needs-partner') filtered = filtered.filter(t => t.playing && t.events.some(e => e.type !== 'singles' && !e.partner));
+
+  if (filtered.length === 0) {
+    list.innerHTML = `<div class="empty-state"><div class="emoji">🌸</div><h3>No tournaments yet!</h3><p>Click the pink + button to add your first tournament.</p></div>`;
+    return;
+  }
+  list.innerHTML = filtered.map(t => renderCard(t)).join('');
+}
+
+function renderCard(t) {
+  const notPlaying = t.playing === false;
+  const needsPartner = !notPlaying && t.events && t.events.some(ev => ev.type !== 'singles' && !ev.partner);
+  const regMap = { 'need-to-register': '⏳ Need to Register', 'registered': '✅ Registered' };
+  return `
+    <div class="tournament-card${notPlaying ? ' not-playing-card' : ''}">
+      ${needsPartner ? '<div class="ribbon">⚠️ Needs Partner</div>' : ''}
+      ${notPlaying ? '<div class="ribbon" style="background:#bbb">🚫 Not Playing</div>' : ''}
+      <div class="card-header">
+        <div>
+          <div class="card-title">${t.name}</div>
+        </div>
+        <div class="card-actions">
+          <button class="card-action-btn" onclick="openEditModal('${t.id}')" title="Edit">✏️</button>
+          <button class="card-action-btn del" onclick="deleteTournament('${t.id}')" title="Delete">🗑️</button>
+        </div>
+      </div>
+      <div class="card-meta">
+        <span>📅 ${formatDate(t.startDate)}${t.startDate !== t.endDate ? ' – ' + formatDate(t.endDate) : ''}</span>
+        ${t.location ? `<span>📍 ${t.location}</span>` : ''}
+        ${t.level ? `<span>🏅 ${t.level}</span>` : ''}
+        ${!notPlaying && t.regStatus ? `<span>${regMap[t.regStatus] || ''}</span>` : ''}
+        ${notPlaying ? `<span style="color:#999;font-style:italic">Not playing this one</span>` : ''}
+      </div>
+      ${!notPlaying && t.events && t.events.length > 0 ? `
+      <div class="card-events">
+        ${t.events.map(ev => `
+          <div class="card-event ${ev.type}">
+            <span class="event-label ${ev.type}">${typeLabel(ev.type)}</span>
+            <span class="partner-info">
+              ${ev.type === 'singles' ? '<em style="color:var(--muted);font-size:0.8rem">Solo event</em>' :
+                ev.partner ? `🤝 ${ev.partner}` :
+                `<span class="no-partner-badge">⚠️ Need a partner!</span>`}
+            </span>
+          </div>
+        `).join('')}
+      </div>` : ''}
+      ${t.notes ? `<div style="margin-top:10px;font-size:0.8rem;color:var(--muted);padding:8px 12px;background:var(--petal);border-radius:8px">📝 ${t.notes}</div>` : ''}
+    </div>
+  `;
+}
+
+async function deleteTournament(id) {
+  if (!confirm('Delete this tournament? 🌸')) return;
+  tournaments = tournaments.filter(t => t.id !== id);
+  renderTournamentList(currentFilter);
+  renderCalendar();
+  renderMonthStrip();
+  await deleteFromDB(id);
+}
+
+// ── STATS ──
+function renderStats() {
+  const grid = document.getElementById('statsGrid');
+  const total = tournaments.length;
+  const playing = tournaments.filter(t => t.playing !== false).length;
+  const notPlaying = tournaments.filter(t => t.playing === false).length;
+  const singles = tournaments.filter(t => t.playing && t.events && t.events.some(e => e.type === 'singles')).length;
+  const womens = tournaments.filter(t => t.playing && t.events && t.events.some(e => e.type === 'womens-doubles')).length;
+  const mixed = tournaments.filter(t => t.playing && t.events && t.events.some(e => e.type === 'mixed-doubles')).length;
+  const needsPartner = tournaments.filter(t => t.playing && t.events && t.events.some(e => e.type !== 'singles' && !e.partner)).length;
+  const needReg = tournaments.filter(t => t.playing && t.regStatus === 'need-to-register').length;
+
+  grid.innerHTML = [
+    [total, 'Total Tracked', '🏓'],
+    [playing, 'Playing', '✅'],
+    [notPlaying, 'Not Playing', '🚫'],
+    [needReg, 'Need to Register', '⏳'],
+    [needsPartner, 'Need a Partner', '⚠️'],
+    [singles, 'Singles', '🎯'],
+    [womens, "Women's Doubles", '👯'],
+    [mixed, 'Mixed Doubles', '💕'],
+  ].map(([n, label, emoji]) => `
+    <div class="stat-card">
+      <div style="font-size:1.8rem;margin-bottom:4px">${emoji}</div>
+      <div class="stat-num">${n}</div>
+      <div class="stat-label">${label}</div>
+    </div>
+  `).join('');
+
+  const upcoming = tournaments
+    .filter(t => t.endDate >= today.toISOString().split('T')[0])
+    .sort((a,b) => a.startDate.localeCompare(b.startDate))
+    .slice(0, 5);
+
+  const upcomingEl = document.getElementById('upcomingList');
+  if (upcoming.length === 0) {
+    upcomingEl.innerHTML = `<div class="empty-state" style="padding:30px 0"><div class="emoji">📭</div><p>No upcoming tournaments added yet!</p></div>`;
+  } else {
+    upcomingEl.innerHTML = upcoming.map(t => renderCard(t)).join('');
+  }
+}
+
+// ── HELPERS ──
+function typeLabel(type) {
+  return type === 'singles' ? '🎯 Singles' :
+         type === 'womens-doubles' ? '👯 Women\'s Doubles' :
+         type === 'mixed-doubles' ? '💕 Mixed Doubles' : type;
+}
+
+function formatDate(dateStr) {
+  const d = new Date(dateStr + 'T00:00:00');
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+// ── INIT ──
+loadFromDB();
+</script>
+</body>
+</html>
