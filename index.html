@@ -21,9 +21,9 @@
     --mint: #b8e8d8;
     --sky: #c2d8f5;
   }
-
+ 
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
+ 
   body {
     font-family: 'DM Sans', sans-serif;
     background: var(--cream);
@@ -34,7 +34,7 @@
       radial-gradient(circle at 90% 80%, rgba(244,167,192,0.2) 0%, transparent 50%),
       url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f4a7c0' fill-opacity='0.06'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   }
-
+ 
   /* ── HEADER ── */
   header {
     background: linear-gradient(135deg, #f4a7c0 0%, #e8679a 50%, #c44b7c 100%);
@@ -90,14 +90,14 @@
     color: var(--deep);
     box-shadow: 0 4px 15px rgba(0,0,0,0.15);
   }
-
+ 
   /* ── MAIN LAYOUT ── */
   .container { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
-
+ 
   /* ── VIEWS ── */
   .view { display: none; }
   .view.active { display: block; }
-
+ 
   /* ── YEAR OVERVIEW STRIP ── */
   .year-strip {
     display: flex;
@@ -137,7 +137,7 @@
     border-color: transparent;
     box-shadow: 0 4px 12px rgba(232,103,154,0.3);
   }
-
+ 
   /* ── CALENDAR ── */
   .calendar-header {
     display: flex;
@@ -172,7 +172,7 @@
     color: white;
     border-color: var(--hot);
   }
-
+ 
   .calendar-grid {
     background: white;
     border-radius: 24px;
@@ -240,7 +240,7 @@
   .day-event.womens-doubles { background: #d6eeff; color: #2d6fa8; }
   .day-event.mixed-doubles { background: #d6ffe8; color: #1a7a4a; }
   .day-more { font-size: 0.6rem; color: var(--muted); padding: 0 4px; }
-
+ 
   /* ── ADD TOURNAMENT BUTTON ── */
   .fab {
     position: fixed;
@@ -261,7 +261,7 @@
     transform: scale(1.1) rotate(15deg);
     box-shadow: 0 8px 32px rgba(232,103,154,0.6);
   }
-
+ 
   /* ── MODAL ── */
   .modal-overlay {
     display: none;
@@ -314,7 +314,7 @@
     transition: all 0.2s;
   }
   .modal-close:hover { background: var(--hot); color: white; }
-
+ 
   /* ── FORM ── */
   .form-group { margin-bottom: 20px; }
   .form-label {
@@ -345,7 +345,7 @@
   }
   .form-textarea { resize: vertical; min-height: 80px; }
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-
+ 
   /* ── EVENT TYPES CHECKBOXES ── */
   .event-types { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
   .type-chip {
@@ -367,7 +367,7 @@
   .type-chip.selected-singles { background: #ffd6e8; color: #c44b7c; border-color: #f4a7c0; }
   .type-chip.selected-womens { background: #d6eeff; color: #2d6fa8; border-color: #a0c8f0; }
   .type-chip.selected-mixed { background: #d6ffe8; color: #1a7a4a; border-color: #7fd4a8; }
-
+ 
   /* ── PARTNER FIELDS ── */
   .partner-section {
     background: var(--petal);
@@ -395,7 +395,7 @@
     font-size: 0.78rem;
     font-weight: 700;
   }
-
+ 
   /* ── SUBMIT BTN ── */
   .btn-primary {
     width: 100%;
@@ -429,7 +429,7 @@
     transition: all 0.2s;
   }
   .btn-secondary:hover { border-color: var(--rose); color: var(--hot); }
-
+ 
   /* ── TOURNAMENT LIST VIEW ── */
   .section-title {
     font-family: 'Playfair Display', serif;
@@ -466,7 +466,7 @@
     border-color: transparent;
     box-shadow: 0 4px 12px rgba(232,103,154,0.25);
   }
-
+ 
   .tournament-card {
     background: white;
     border-radius: 20px;
@@ -516,7 +516,7 @@
   }
   .card-action-btn:hover { border-color: var(--hot); color: var(--hot); }
   .card-action-btn.del:hover { border-color: #e05252; color: #e05252; }
-
+ 
   .card-meta {
     display: flex;
     gap: 14px;
@@ -526,7 +526,7 @@
     flex-wrap: wrap;
   }
   .card-meta span { display: flex; align-items: center; gap: 4px; }
-
+ 
   .card-events { display: flex; flex-direction: column; gap: 6px; }
   .card-event {
     display: flex;
@@ -547,7 +547,7 @@
   .event-label.womens-doubles { color: #2d6fa8; }
   .event-label.mixed-doubles { color: #1a7a4a; }
   .partner-info { color: var(--text); flex: 1; }
-
+ 
   /* ── STATS VIEW ── */
   .stats-grid {
     display: grid;
@@ -579,7 +579,7 @@
     letter-spacing: 0.5px;
     margin-top: 4px;
   }
-
+ 
   /* ── EMPTY STATE ── */
   .empty-state {
     text-align: center;
@@ -594,7 +594,7 @@
     margin-bottom: 8px;
   }
   .empty-state p { font-size: 0.9rem; }
-
+ 
   /* ── DAY DETAIL MODAL ── */
   .day-events-list { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
   .day-event-item {
@@ -610,7 +610,7 @@
   .day-event-item:hover { border-color: var(--rose); background: var(--petal); }
   .day-event-item strong { font-family: 'Playfair Display', serif; color: var(--text); }
   .day-event-item small { color: var(--muted); font-size: 0.78rem; }
-
+ 
   /* ── NEED PARTNER ALERT ── */
   .need-partner-alert {
     background: linear-gradient(135deg, #fff8e8, #fff3cd);
@@ -624,7 +624,7 @@
     gap: 8px;
     margin-top: 4px;
   }
-
+ 
   /* ── PLAYING TOGGLE ── */
   .playing-toggle-wrap {
     display: flex;
@@ -657,7 +657,7 @@
     color: #b03030;
     box-shadow: 0 3px 12px rgba(176,48,48,0.15);
   }
-
+ 
   /* ── REG STATUS TOGGLE ── */
   .reg-toggle-wrap {
     display: flex;
@@ -689,19 +689,19 @@
     color: #2d6fa8;
     box-shadow: 0 3px 10px rgba(45,111,168,0.15);
   }
-
+ 
   /* not-playing calendar badge */
   .day-event.not-playing { background: #f0f0f0; color: #888; font-style: italic; }
-
+ 
   /* not-playing card style */
   .tournament-card.not-playing-card { opacity: 0.72; border-style: dashed; }
   .tournament-card.not-playing-card::before { background: #ccc; }
-
-
+ 
+ 
   ::-webkit-scrollbar { width: 6px; height: 6px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: var(--rose); border-radius: 10px; }
-
+ 
   /* ── RESPONSIVE ── */
   @media (max-width: 600px) {
     header { padding: 16px 20px; }
@@ -712,7 +712,7 @@
     .day-num { font-size: 0.75rem; width: 22px; height: 22px; }
     .day-event { font-size: 0.55rem; }
   }
-
+ 
   .ribbon {
     position: absolute;
     top: 16px;
@@ -737,7 +737,7 @@
 </style>
 </head>
 <body>
-
+ 
 <header>
   <div class="header-left">
     <h1>🏓 Pickle Princess</h1>
@@ -749,9 +749,9 @@
     <button class="nav-btn" onclick="showView('stats')">📊 Stats</button>
   </div>
 </header>
-
+ 
 <div class="container">
-
+ 
   <!-- CALENDAR VIEW -->
   <div id="view-calendar" class="view active">
     <div class="year-strip" id="monthStrip"></div>
@@ -778,7 +778,7 @@
       <div class="cal-cells" id="calCells"></div>
     </div>
   </div>
-
+ 
   <!-- TOURNAMENTS VIEW -->
   <div id="view-tournaments" class="view">
     <h2 class="section-title">My Tournaments</h2>
@@ -794,7 +794,7 @@
     </div>
     <div id="tournamentList"></div>
   </div>
-
+ 
   <!-- STATS VIEW -->
   <div id="view-stats" class="view">
     <h2 class="section-title">My Season at a Glance</h2>
@@ -803,12 +803,12 @@
     <h3 style="font-family:'Playfair Display',serif;color:var(--deep);margin-bottom:16px;">📍 Upcoming Tournaments</h3>
     <div id="upcomingList"></div>
   </div>
-
+ 
 </div>
-
+ 
 <!-- FAB -->
 <button class="fab" onclick="openAddModal()" title="Add Tournament">+</button>
-
+ 
 <!-- ADD/EDIT TOURNAMENT MODAL -->
 <div class="modal-overlay" id="tournamentModal">
   <div class="modal">
@@ -816,13 +816,13 @@
       <h3 class="modal-title" id="modalTitle">Add Tournament 🏓</h3>
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
-
+ 
     <!-- STEP 1: Tournament name + dates always shown -->
     <div class="form-group">
       <label class="form-label">Tournament Name *</label>
       <input type="text" class="form-input" id="tName" placeholder="e.g. National Open Pickleball Championship">
     </div>
-
+ 
     <div class="form-row">
       <div class="form-group">
         <label class="form-label">Start Date *</label>
@@ -833,7 +833,7 @@
         <input type="date" class="form-input" id="tEndDate">
       </div>
     </div>
-
+ 
     <!-- STEP 2: Playing toggle — always shown -->
     <div class="form-group">
       <label class="form-label">Are you playing? *</label>
@@ -842,10 +842,10 @@
         <button type="button" class="playing-toggle-btn" id="btn-not-playing" onclick="setPlaying(false)">🚫 Not Playing</button>
       </div>
     </div>
-
+ 
     <!-- DETAILS SECTION: only shown if Playing -->
     <div id="detailsSection">
-
+ 
       <!-- Registration Status toggle -->
       <div class="form-group">
         <label class="form-label">Registration Status *</label>
@@ -854,12 +854,18 @@
           <button type="button" class="reg-toggle-btn" id="btn-registered" onclick="setRegStatus('registered')">✅ Registered</button>
         </div>
       </div>
-
+ 
+      <div class="form-group" id="regDeadlineGroup">
+        <label class="form-label">📅 Registration Deadline</label>
+        <input type="date" class="form-input" id="tRegDeadline" oninput="checkDeadlineWarning()">
+        <div id="deadlineWarning" style="display:none;margin-top:6px;"></div>
+      </div>
+ 
       <div class="form-group">
         <label class="form-label">Location</label>
         <input type="text" class="form-input" id="tLocation" placeholder="City, State or Venue name">
       </div>
-
+ 
       <div class="form-group">
         <label class="form-label">Division / Level</label>
         <select class="form-select" id="tLevel">
@@ -870,7 +876,7 @@
           <option>4.5</option>
         </select>
       </div>
-
+ 
       <div class="form-group">
         <label class="form-label">Event Types *</label>
         <div class="event-types" id="eventTypesContainer">
@@ -885,7 +891,7 @@
           </label>
         </div>
       </div>
-
+ 
       <!-- Partner section: shown when doubles selected -->
       <div id="partnerSection" style="display:none;">
         <div class="partner-section">
@@ -893,18 +899,18 @@
           <div id="partnerFields"></div>
         </div>
       </div>
-
+ 
       <div class="form-group">
         <label class="form-label">Notes</label>
         <textarea class="form-textarea" id="tNotes" placeholder="Prize money, registration deadline, travel info..."></textarea>
       </div>
-
+ 
     </div><!-- end detailsSection -->
-
+ 
     <button class="btn-primary" onclick="saveTournament()">Save Tournament 🌸</button>
   </div>
 </div>
-
+ 
 <!-- DAY DETAIL MODAL -->
 <div class="modal-overlay" id="dayModal">
   <div class="modal">
@@ -916,7 +922,7 @@
     <button class="btn-primary" style="margin-top:20px" onclick="openAddModalForDate()">+ Add Tournament on this Day</button>
   </div>
 </div>
-
+ 
 <script>
 // ── SUPABASE CONFIG ──
 const SUPABASE_URL = 'https://mlsdzqseujwljgwutkub.supabase.co';
@@ -928,7 +934,7 @@ const HEADERS = {
   'Authorization': `Bearer ${SUPABASE_KEY}`,
   'Prefer': 'return=representation'
 };
-
+ 
 // ── DATA ──
 let tournaments = [];
 let currentYear = new Date().getFullYear();
@@ -937,10 +943,10 @@ let editingId = null;
 let selectedDayDate = null;
 let isPlaying = true;
 let regStatus = 'need-to-register';
-
+ 
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 const today = new Date();
-
+ 
 // ── LOADING UI ──
 function showLoading(msg = 'Saving...') {
   let el = document.getElementById('loadingToast');
@@ -965,7 +971,7 @@ function showSuccess(msg) {
   showLoading('✅ ' + msg);
   setTimeout(hideLoading, 2000);
 }
-
+ 
 // ── DB HELPERS ──
 // Convert DB row → app object
 function fromRow(row) {
@@ -976,6 +982,7 @@ function fromRow(row) {
     endDate: row.end_date,
     playing: row.playing,
     regStatus: row.reg_status,
+    regDeadline: row.reg_deadline,
     location: row.location,
     level: row.level,
     notes: row.notes,
@@ -992,6 +999,7 @@ function toRow(t) {
     end_date: t.endDate,
     playing: t.playing,
     reg_status: t.regStatus || null,
+    reg_deadline: t.regDeadline || null,
     location: t.location || null,
     level: t.level || null,
     notes: t.notes || null,
@@ -999,7 +1007,7 @@ function toRow(t) {
     created_at: t.createdAt || Date.now()
   };
 }
-
+ 
 async function loadFromDB() {
   showLoading('Loading your tournaments... 🌸');
   try {
@@ -1015,7 +1023,7 @@ async function loadFromDB() {
     console.error(e);
   }
 }
-
+ 
 async function saveToDB(t) {
   showLoading('Saving... 🌸');
   try {
@@ -1032,7 +1040,7 @@ async function saveToDB(t) {
     console.error(e);
   }
 }
-
+ 
 async function deleteFromDB(id) {
   showLoading('Deleting...');
   try {
@@ -1044,7 +1052,7 @@ async function deleteFromDB(id) {
     console.error(e);
   }
 }
-
+ 
 // ── PLAYING TOGGLE ──
 function setPlaying(playing) {
   isPlaying = playing;
@@ -1052,14 +1060,34 @@ function setPlaying(playing) {
   document.getElementById('btn-not-playing').className = 'playing-toggle-btn' + (!playing ? ' active-not-playing' : '');
   document.getElementById('detailsSection').style.display = playing ? 'block' : 'none';
 }
-
+ 
 // ── REG STATUS TOGGLE ──
 function setRegStatus(status) {
   regStatus = status;
   document.getElementById('btn-need-reg').className = 'reg-toggle-btn' + (status === 'need-to-register' ? ' active-need' : '');
   document.getElementById('btn-registered').className = 'reg-toggle-btn' + (status === 'registered' ? ' active-registered' : '');
+  const deadlineGroup = document.getElementById('regDeadlineGroup');
+  if (deadlineGroup) deadlineGroup.style.display = status === 'need-to-register' ? 'block' : 'none';
+  checkDeadlineWarning();
 }
-
+ 
+function checkDeadlineWarning() {
+  const val = document.getElementById('tRegDeadline')?.value;
+  const warn = document.getElementById('deadlineWarning');
+  if (!warn || !val) { if(warn) warn.style.display = 'none'; return; }
+  const deadline = new Date(val + 'T00:00:00');
+  const diff = Math.ceil((deadline - today) / (1000*60*60*24));
+  if (diff < 0) {
+    warn.style.display = 'block';
+    warn.innerHTML = `<div class="no-partner-badge" style="background:#ffe8e8;color:#b03030;border-color:#f0a0a0">⚠️ Deadline passed!</div>`;
+  } else if (diff <= 7) {
+    warn.style.display = 'block';
+    warn.innerHTML = `<div class="no-partner-badge" style="background:#fff3cd;color:#8a6500;border-color:#ffe08a">⏰ Only ${diff} day${diff===1?'':'s'} left to register!</div>`;
+  } else {
+    warn.style.display = 'none';
+  }
+}
+ 
 // ── VIEWS ──
 function showView(name) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
@@ -1069,7 +1097,7 @@ function showView(name) {
   if (name === 'tournaments') renderTournamentList('all');
   if (name === 'stats') renderStats();
 }
-
+ 
 // ── MONTH STRIP ──
 function renderMonthStrip() {
   const strip = document.getElementById('monthStrip');
@@ -1088,7 +1116,7 @@ function renderMonthStrip() {
     strip.appendChild(chip);
   }
 }
-
+ 
 // ── CALENDAR ──
 function renderCalendar() {
   document.getElementById('calMonthTitle').textContent = MONTHS[currentMonth] + ' ' + currentYear;
@@ -1096,25 +1124,25 @@ function renderCalendar() {
   cells.innerHTML = '';
   const firstDay = new Date(currentYear, currentMonth, 1).getDay();
   const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-
+ 
   for (let i = 0; i < firstDay; i++) {
     const el = document.createElement('div');
     el.className = 'cal-cell empty';
     cells.appendChild(el);
   }
-
+ 
   for (let d = 1; d <= daysInMonth; d++) {
     const dateStr = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
     const isToday = today.getFullYear() === currentYear && today.getMonth() === currentMonth && today.getDate() === d;
     const cell = document.createElement('div');
     cell.className = 'cal-cell' + (isToday ? ' today' : '');
     cell.onclick = () => openDayModal(dateStr, d);
-
+ 
     const num = document.createElement('div');
     num.className = 'day-num';
     num.textContent = d;
     cell.appendChild(num);
-
+ 
     const dayTourneys = getTournamentsOnDate(dateStr);
     let shown = 0;
     dayTourneys.forEach(t => {
@@ -1144,17 +1172,17 @@ function renderCalendar() {
       more.textContent = '+ more';
       cell.appendChild(more);
     }
-
+ 
     cells.appendChild(cell);
   }
 }
-
+ 
 function getTournamentsOnDate(dateStr) {
   return tournaments.filter(t => {
     return dateStr >= t.startDate && dateStr <= t.endDate;
   });
 }
-
+ 
 function changeMonth(dir) {
   currentMonth += dir;
   if (currentMonth > 11) { currentMonth = 0; currentYear++; }
@@ -1162,14 +1190,14 @@ function changeMonth(dir) {
   renderCalendar();
   renderMonthStrip();
 }
-
+ 
 function goToToday() {
   currentYear = today.getFullYear();
   currentMonth = today.getMonth();
   renderCalendar();
   renderMonthStrip();
 }
-
+ 
 // ── DAY MODAL ──
 function openDayModal(dateStr, d) {
   selectedDayDate = dateStr;
@@ -1197,11 +1225,11 @@ function openDayModal(dateStr, d) {
   }
   document.getElementById('dayModal').classList.add('open');
 }
-
+ 
 function closeDayModal() {
   document.getElementById('dayModal').classList.remove('open');
 }
-
+ 
 function openAddModalForDate() {
   closeDayModal();
   openAddModal();
@@ -1210,7 +1238,7 @@ function openAddModalForDate() {
     document.getElementById('tEndDate').value = selectedDayDate;
   }
 }
-
+ 
 // ── MODAL ──
 function openAddModal() {
   editingId = null;
@@ -1218,7 +1246,7 @@ function openAddModal() {
   clearForm();
   document.getElementById('tournamentModal').classList.add('open');
 }
-
+ 
 function openEditModal(id) {
   editingId = id;
   const t = tournaments.find(x => x.id === id);
@@ -1227,16 +1255,18 @@ function openEditModal(id) {
   document.getElementById('tName').value = t.name;
   document.getElementById('tStartDate').value = t.startDate;
   document.getElementById('tEndDate').value = t.endDate;
-
+ 
   // Playing toggle
   setPlaying(t.playing !== false);
-
+ 
   if (t.playing !== false) {
     document.getElementById('tLocation').value = t.location || '';
     document.getElementById('tLevel').value = t.level || '';
     document.getElementById('tNotes').value = t.notes || '';
+    document.getElementById('tRegDeadline').value = t.regDeadline || '';
+    checkDeadlineWarning();
     setRegStatus(t.regStatus || 'need-to-register');
-
+ 
     document.querySelectorAll('.type-chip input').forEach(cb => {
       cb.checked = false;
       cb.closest('.type-chip').className = 'type-chip';
@@ -1247,15 +1277,15 @@ function openEditModal(id) {
     });
     updatePartnerSection(t.events || []);
   }
-
+ 
   document.getElementById('tournamentModal').classList.add('open');
 }
-
+ 
 function closeModal() {
   document.getElementById('tournamentModal').classList.remove('open');
   editingId = null;
 }
-
+ 
 function clearForm() {
   document.getElementById('tName').value = '';
   document.getElementById('tStartDate').value = '';
@@ -1263,6 +1293,8 @@ function clearForm() {
   document.getElementById('tLocation').value = '';
   document.getElementById('tLevel').value = '';
   document.getElementById('tNotes').value = '';
+  document.getElementById('tRegDeadline').value = '';
+  document.getElementById('deadlineWarning').style.display = 'none';
   setPlaying(true);
   setRegStatus('need-to-register');
   document.querySelectorAll('.type-chip input').forEach(cb => {
@@ -1272,7 +1304,7 @@ function clearForm() {
   document.getElementById('partnerSection').style.display = 'none';
   document.getElementById('partnerFields').innerHTML = '';
 }
-
+ 
 function toggleType(cb) {
   updateChipStyle(cb);
   const selected = Array.from(document.querySelectorAll('.type-chip input:checked')).map(c => ({
@@ -1281,7 +1313,7 @@ function toggleType(cb) {
   }));
   updatePartnerSection(selected);
 }
-
+ 
 function updateChipStyle(cb) {
   const chip = cb.closest('.type-chip');
   chip.className = 'type-chip';
@@ -1291,7 +1323,7 @@ function updateChipStyle(cb) {
     if (cb.value === 'mixed-doubles') chip.classList.add('selected-mixed');
   }
 }
-
+ 
 function updatePartnerSection(events) {
   const doublesEvents = events.filter(ev => ev.type !== 'singles');
   const section = document.getElementById('partnerSection');
@@ -1316,13 +1348,13 @@ function updatePartnerSection(events) {
     </div>
   `).join('');
 }
-
+ 
 function checkPartnerWarning(type) {
   const val = document.getElementById('partner-' + type)?.value || '';
   const warn = document.getElementById('warn-' + type);
   if (warn) warn.style.display = val.trim() ? 'none' : 'flex';
 }
-
+ 
 async function saveTournament() {
   const name = document.getElementById('tName').value.trim();
   const startDate = document.getElementById('tStartDate').value;
@@ -1331,7 +1363,7 @@ async function saveTournament() {
     alert('Please fill in the name and dates! 🌸');
     return;
   }
-
+ 
   let t = {
     id: editingId || Date.now().toString(),
     name,
@@ -1340,7 +1372,7 @@ async function saveTournament() {
     playing: isPlaying,
     createdAt: editingId ? (tournaments.find(x=>x.id===editingId)?.createdAt || Date.now()) : Date.now()
   };
-
+ 
   if (isPlaying) {
     const checkedTypes = Array.from(document.querySelectorAll('.type-chip input:checked'));
     if (checkedTypes.length === 0) {
@@ -1348,6 +1380,7 @@ async function saveTournament() {
       return;
     }
     t.regStatus = regStatus;
+    t.regDeadline = document.getElementById('tRegDeadline').value || null;
     t.location = document.getElementById('tLocation').value.trim();
     t.level = document.getElementById('tLevel').value;
     t.notes = document.getElementById('tNotes').value.trim();
@@ -1358,7 +1391,7 @@ async function saveTournament() {
   } else {
     t.events = [];
   }
-
+ 
   // Upsert locally + to DB
   const idx = tournaments.findIndex(x => x.id === t.id);
   if (idx >= 0) tournaments[idx] = t; else tournaments.push(t);
@@ -1367,7 +1400,7 @@ async function saveTournament() {
   renderMonthStrip();
   await saveToDB(t);
 }
-
+ 
 // ── TOURNAMENT LIST ──
 let currentFilter = 'all';
 function filterTournaments(filter, btn) {
@@ -1376,7 +1409,7 @@ function filterTournaments(filter, btn) {
   btn.classList.add('active');
   renderTournamentList(filter);
 }
-
+ 
 function renderTournamentList(filter) {
   const list = document.getElementById('tournamentList');
   let filtered = [...tournaments].sort((a,b) => a.startDate.localeCompare(b.startDate));
@@ -1386,14 +1419,14 @@ function renderTournamentList(filter) {
   else if (filter === 'womens-doubles') filtered = filtered.filter(t => t.playing && t.events.some(e => e.type === 'womens-doubles'));
   else if (filter === 'mixed-doubles') filtered = filtered.filter(t => t.playing && t.events.some(e => e.type === 'mixed-doubles'));
   else if (filter === 'needs-partner') filtered = filtered.filter(t => t.playing && t.events.some(e => e.type !== 'singles' && !e.partner));
-
+ 
   if (filtered.length === 0) {
     list.innerHTML = `<div class="empty-state"><div class="emoji">🌸</div><h3>No tournaments yet!</h3><p>Click the pink + button to add your first tournament.</p></div>`;
     return;
   }
   list.innerHTML = filtered.map(t => renderCard(t)).join('');
 }
-
+ 
 function renderCard(t) {
   const notPlaying = t.playing === false;
   const needsPartner = !notPlaying && t.events && t.events.some(ev => ev.type !== 'singles' && !ev.partner);
@@ -1416,6 +1449,7 @@ function renderCard(t) {
         ${t.location ? `<span>📍 ${t.location}</span>` : ''}
         ${t.level ? `<span>🏅 ${t.level}</span>` : ''}
         ${!notPlaying && t.regStatus ? `<span>${regMap[t.regStatus] || ''}</span>` : ''}
+        ${!notPlaying && t.regStatus === 'need-to-register' && t.regDeadline ? `<span>${deadlineBadge(t.regDeadline)}</span>` : ''}
         ${notPlaying ? `<span style="color:#999;font-style:italic">Not playing this one</span>` : ''}
       </div>
       ${!notPlaying && t.events && t.events.length > 0 ? `
@@ -1435,7 +1469,7 @@ function renderCard(t) {
     </div>
   `;
 }
-
+ 
 async function deleteTournament(id) {
   if (!confirm('Delete this tournament? 🌸')) return;
   tournaments = tournaments.filter(t => t.id !== id);
@@ -1444,7 +1478,7 @@ async function deleteTournament(id) {
   renderMonthStrip();
   await deleteFromDB(id);
 }
-
+ 
 // ── STATS ──
 function renderStats() {
   const grid = document.getElementById('statsGrid');
@@ -1456,7 +1490,7 @@ function renderStats() {
   const mixed = tournaments.filter(t => t.playing && t.events && t.events.some(e => e.type === 'mixed-doubles')).length;
   const needsPartner = tournaments.filter(t => t.playing && t.events && t.events.some(e => e.type !== 'singles' && !e.partner)).length;
   const needReg = tournaments.filter(t => t.playing && t.regStatus === 'need-to-register').length;
-
+ 
   grid.innerHTML = [
     [total, 'Total Tracked', '🏓'],
     [playing, 'Playing', '✅'],
@@ -1473,12 +1507,12 @@ function renderStats() {
       <div class="stat-label">${label}</div>
     </div>
   `).join('');
-
+ 
   const upcoming = tournaments
     .filter(t => t.endDate >= today.toISOString().split('T')[0])
     .sort((a,b) => a.startDate.localeCompare(b.startDate))
     .slice(0, 5);
-
+ 
   const upcomingEl = document.getElementById('upcomingList');
   if (upcoming.length === 0) {
     upcomingEl.innerHTML = `<div class="empty-state" style="padding:30px 0"><div class="emoji">📭</div><p>No upcoming tournaments added yet!</p></div>`;
@@ -1486,19 +1520,27 @@ function renderStats() {
     upcomingEl.innerHTML = upcoming.map(t => renderCard(t)).join('');
   }
 }
-
+ 
 // ── HELPERS ──
+function deadlineBadge(dateStr) {
+  const deadline = new Date(dateStr + 'T00:00:00');
+  const diff = Math.ceil((deadline - today) / (1000*60*60*24));
+  if (diff < 0) return `<span style="background:#ffe8e8;color:#b03030;border:1.5px solid #f0a0a0;border-radius:20px;padding:2px 10px;font-size:0.75rem;font-weight:700">⚠️ Deadline passed!</span>`;
+  if (diff <= 7) return `<span style="background:#fff3cd;color:#8a6500;border:1.5px solid #ffe08a;border-radius:20px;padding:2px 10px;font-size:0.75rem;font-weight:700">⏰ Register by ${formatDate(dateStr)} — ${diff}d left!</span>`;
+  return `<span style="color:var(--muted);font-size:0.8rem">📋 Register by ${formatDate(dateStr)}</span>`;
+}
+ 
 function typeLabel(type) {
   return type === 'singles' ? '🎯 Singles' :
          type === 'womens-doubles' ? '👯 Women\'s Doubles' :
          type === 'mixed-doubles' ? '💕 Mixed Doubles' : type;
 }
-
+ 
 function formatDate(dateStr) {
   const d = new Date(dateStr + 'T00:00:00');
   return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
-
+ 
 // ── INIT ──
 loadFromDB();
 </script>
